@@ -1,0 +1,34 @@
+DUBAI MUNICIPALITY BUILDING CODE - KEY REGULATIONS SUMMARY (MOCK DATA)
+
+1. VILLA REGULATIONS
+- Minimum ceiling height for habitable rooms is 3.0 meters (9.84 feet).
+- Minimum ceiling height for service rooms (bathrooms, kitchens) is 2.4 meters.
+- Maximum building height for private villas (G+1) is 12 meters from ground level.
+- Setback from street: Minimum 3.0 meters.
+- Setback from neighbors: Minimum 3.0 meters on all sides.
+- Boundary wall height: Maximum 2.0 meters.
+- Privacy guidelines: Windows overlooking neighbors must be obscured or placed at high levels (min 1.8m sill height).
+
+2. PALM JUMEIRAH SPECIFIC REGULATIONS (NAKHEEL)
+- Architecture style must follow specific frond themes (Mediterranean, Arabic, Contemporary).
+- Color palette: Earthy tones, white, beige. Bright or neon colors are strictly prohibited.
+- Roof type: Pitched roofs required for specific themes; flat roofs allowed for modern styles with specific approval.
+- Swimming pools: Must be within property boundary, min 1.5m from boundary wall.
+- Beach access: Unobstructed access required; no permanent structures in the beach setback zone.
+
+3. APARTMENT/COMMERCIAL REGULATIONS
+- Corridors minimum width: 1.5 meters for residential, 1.8 meters for commercial.
+- Fire safety: Sprinklers mandatory in all rooms. Smoke detectors required.
+- Accessibility: Ramps required for all level changes > 6mm. Ramp slope max 1:12.
+- Minimum door width: 0.9m for entrances, 1.0m for accessible units.
+
+4. SUSTAINABILITY (AL SA'FAT)
+- Windows: Must be double-glazed with thermal break.
+- Water efficiency: Low-flow fixtures required.
+- Lighting: LED lighting mandatory for at least 75% of connected load.
+- Solar: Solar water heaters mandatory for all new villas.
+
+5. GENERAL INTERIOR DESIGN
+- Kitchen ventilation: Hoods must extract to outside.
+- Bathroom ventilation: Mechanical extraction required if no window.
+- Balcony safety: Railing height minimum 1.1 meters. Gaps max 10cm.

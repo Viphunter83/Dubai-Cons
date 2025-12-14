@@ -1,0 +1,81 @@
+"""
+Unit tests for Dubai Cons AI Suite API
+"""
+
+import pytest
+from fastapi.testclient import TestClient
+from src.main import app
+
+client = TestClient(app)
+
+
+def test_health_endpoint():
+    """Test health check endpoint"""
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json()["status"] == "healthy"
+
+
+def test_root_endpoint():
+    """Test root endpoint"""
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json()["message"] == "Dubai Cons AI Suite MVP"
+
+
+def test_create_client():
+    """Test creating a client"""
+    client_data = {
+        "name": "Test Client",
+        "email": "test@example.com",
+        "segment": "luxury"
+    }
+    response = client.post("/api/v1/clients/", json=client_data)
+    assert response.status_code == 201
+    data = response.json()
+    assert data["name"] == "Test Client"
+    assert data["email"] == "test@example.com"
+
+
+def test_get_clients():
+    """Test getting all clients"""
+    response = client.get("/api/v1/clients/")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+
+def test_create_project():
+    """Test creating a project"""
+    project_data = {
+        "title": "Test Project",
+        "description": "Test Description",
+        "property_type": "villa",
+        "area": 300.0
+    }
+    response = client.post("/api/v1/projects/", json=project_data)
+    assert response.status_code == 201
+    data = response.json()
+    assert data["title"] == "Test Project"
+
+
+def test_get_projects():
+    """Test getting all projects"""
+    response = client.get("/api/v1/projects/")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+
+def test_register_user():
+    """Test user registration"""
+    user_data = {
+        "email": "test@example.com",
+        "password": "testpassword123",
+        "full_name": "Test User"
+    }
+    response = client.post("/api/v1/auth/register", json=user_data)
+    # May return 400 if user already exists
+    assert response.status_code in [201, 400]
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
