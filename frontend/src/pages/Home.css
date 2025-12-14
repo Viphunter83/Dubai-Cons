@@ -1,7 +1,30 @@
 .hero {
   text-align: center;
-  padding: 4rem 0;
+  padding: 8rem 0;
   margin-bottom: 2rem;
+  background-image: url('/assets/hero_bg_cyberpunk_1765726266509.png');
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(15, 15, 19, 0.4), rgba(15, 15, 19, 0.9));
+  z-index: 0;
+}
+
+.hero * {
+  position: relative;
+  z-index: 1;
 }
 
 .hero h1 {
@@ -26,26 +49,19 @@
 }
 
 .feature-card {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  border: var(--glass-border);
+  /* Inherits from .glass-card in JSX */
   padding: 2.5rem 2rem;
-  border-radius: var(--radius-lg);
   text-align: center;
-  transition: all 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--accent-gold);
-  box-shadow: var(--shadow-glow);
 }
 
 .feature-card h3 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
-  color: var(--accent-cyan);
+  background: linear-gradient(135deg, white 0%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  font-weight: 700;
 }
 
 .stats {

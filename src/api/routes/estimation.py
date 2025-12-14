@@ -210,3 +210,34 @@ async def quick_calculate_estimation(request: QuickEstimationRequest):
         **calculation
     }
 
+@router.post("/audit/{project_id}")
+async def audit_estimation(
+    project_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Perform an AI Audit on the existing estimation for a project
+    """
+    # Get project
+    project = db.query(Project).filter(Project.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    # Get estimation
+    estimation = db.query(Estimation).filter(Estimation.project_id == project_id).first()
+    if not estimation:
+        raise HTTPException(status_code=404, detail="No estimation found. Calculate it first.")
+
+    # Prepare data for service
+    estimation_dict = {
+        "total_cost": estimation.total_cost,
+        "materials_cost": estimation.materials_cost,
+        "labor_cost": estimation.labor_cost,
+        "furniture_cost": estimation.furniture_cost or 0,
+        "tier": "standard" # simplistic, could be stored
+    }
+
+    # Call service
+    audit_result = await estimation_service.audit_estimation(project, estimation_dict)
+    
+    return audit_result

@@ -212,7 +212,7 @@ function Design() {
                 disabled={loading}
                 style={{ flex: 0.5, borderColor: '#00f2ea', color: '#00f2ea' }}
               >
-                🛡️ Check Code
+                🛡️ Check Compliance (RAG Engine)
               </button>
             </div>
           </div>

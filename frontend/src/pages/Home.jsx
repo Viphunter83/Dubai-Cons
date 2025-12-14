@@ -6,27 +6,27 @@ function Home() {
     <div className="home">
       <div className="container">
         <div className="hero">
-          <h1>Welcome to Dubai Cons AI Suite</h1>
+          <h1 className="text-gradient-gold">Welcome to Dubai Cons AI Suite</h1>
           <p className="subtitle">Professional AI-powered architectural design and visualization</p>
         </div>
 
         <div className="features">
-          <div className="feature-card">
+          <div className="feature-card glass-card">
             <h3>🏗️ Project Management</h3>
             <p>Manage your construction projects efficiently with our AI-powered tools</p>
           </div>
 
-          <div className="feature-card">
+          <div className="feature-card glass-card">
             <h3>🎨 AI Design Generation</h3>
             <p>Generate stunning design concepts using advanced AI technology</p>
           </div>
 
-          <div className="feature-card">
+          <div className="feature-card glass-card">
             <h3>👥 Client Management</h3>
             <p>Keep track of all your clients and their preferences</p>
           </div>
 
-          <div className="feature-card">
+          <div className="feature-card glass-card">
             <h3>🎯 3D Visualization</h3>
             <p>Visualize your designs in realistic 3D before construction</p>
           </div>

@@ -150,32 +150,80 @@ class EstimationService:
             "tier": tier
         }
     
-    def _get_complexity_multiplier(self, project: Any, design_concept: Optional[Any]) -> float:
+    async def audit_estimation(self, project: Any, estimation_result: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Calculate complexity multiplier based on project details
+        Perform an AI audit of the estimation using Gemini
         """
-        multiplier = 1.0
+        from ai_modules.gemini_client import gemini_client
+        import json
+        import re
+
+        # Construct prompt
+        prompt = f"""
+        You are an expert Quantity Surveyor and Construction Cost Consultant for luxury projects in Dubai.
+        Analyze the following project estimation and provide a risk audit.
+
+        Project Details:
+        - Type: {project.property_type}
+        - Area: {project.area} sqm
+        - Tier: {estimation_result.get('tier', 'standard').upper()}
+        - Location: {project.location or 'Dubai'}
         
-        # Based on area
-        if project.area:
-            if project.area < 100:
-                multiplier *= 1.2  # Small spaces are harder
-            elif project.area > 500:
-                multiplier *= 1.15  # Large spaces cost more
-        
-        # Based on segment
-        if project.client and project.client.segment == "luxury":
-            multiplier *= 1.3  # Luxury requires premium materials
-        
-        # Based on design concept
-        if design_concept:
-            if design_concept.style:
-                if "luxury" in design_concept.style.lower():
-                    multiplier *= 1.2
-                if "custom" in design_concept.style.lower():
-                    multiplier *= 1.15
-        
-        return multiplier
+        Calculated Estimation (AED):
+        - Total: {estimation_result['total_cost']}
+        - Materials: {estimation_result['materials_cost']}
+        - Labor: {estimation_result['labor_cost']}
+        - Furniture (Budgeted): {estimation_result['furniture_cost']}
+
+        Task:
+        1. Identify 2-3 specific "Hidden Risks" or cost drivers for this type of project in Dubai (e.g., specific material sourcing, permit delays, labor demand).
+        2. Recommend a "Contingency Buffer" percentage (e.g., 5%, 10%).
+        3. Provide a brief expert insight.
+
+        Return ONLY raw JSON in this format:
+        {{
+            "risk_factors": ["risk 1", "risk 2"],
+            "recommended_buffer_percent": 10,
+            "expert_insight": "Short paragraph text..."
+        }}
+        """
+
+        try:
+            # Call Gemini
+            ai_response = await gemini_client.generate_content(prompt)
+            if not ai_response:
+                raise Exception("No response from AI")
+
+            # Parse JSON
+            # Clean potential markdown code blocks
+            clean_response = re.sub(r'```json|```', '', ai_response).strip()
+            audit_data = json.loads(clean_response)
+            
+            # Refine costs
+            buffer_percent = audit_data.get("recommended_buffer_percent", 5)
+            original_total = estimation_result["total_cost"]
+            adjusted_total = original_total * (1 + buffer_percent / 100)
+            
+            return {
+                "original_total": original_total,
+                "adjusted_total": round(adjusted_total, 2),
+                "buffer_percent": buffer_percent,
+                "buffer_amount": round(adjusted_total - original_total, 2),
+                "risk_factors": audit_data.get("risk_factors", []),
+                "expert_insight": audit_data.get("expert_insight", "AI Audit completed.")
+            }
+
+        except Exception as e:
+            print(f"AI Audit failed: {e}")
+            # Fallback
+            return {
+                "original_total": estimation_result["total_cost"],
+                "adjusted_total": estimation_result["total_cost"] * 1.05,
+                "buffer_percent": 5,
+                "buffer_amount": estimation_result["total_cost"] * 0.05,
+                "risk_factors": ["Standard Uncertainty"],
+                "expert_insight": "AI could not reach the server, applied standard 5% buffer."
+            }
 
 
 # Global service instance

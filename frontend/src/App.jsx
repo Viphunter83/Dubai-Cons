@@ -7,28 +7,27 @@ import Clients from './pages/Clients'
 import Design from './pages/Design'
 import Estimation from './pages/Estimation'
 
-import FloatingDock from './components/FloatingDock'
+import FloatingDock from './components/FloatingDock';
+import ProjectDetails from './pages/ProjectDetails';
 
 function App() {
   return (
     <Router>
       <div className="app">
-        {/* Removed Top Header */}
-
-        <main className="main-content">
+        <FloatingDock />
+        <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/clients" element={<Clients />} />
             <Route path="/design" element={<Design />} />
             <Route path="/estimation" element={<Estimation />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:id" element={<ProjectDetails />} />
+            <Route path="/clients" element={<Clients />} />
           </Routes>
-        </main>
-
-        <FloatingDock />
+        </div>
       </div>
     </Router>
-  )
+  );
 }
 
 export default App

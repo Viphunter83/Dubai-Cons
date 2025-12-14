@@ -19,16 +19,17 @@ const FloatingDock = () => {
             boxShadow: '0 10px 40px rgba(0, 0, 0, 0.4)',
             zIndex: 1000
         }}>
-            <DockItem to="/" icon="🏠" label="Home" />
+            <DockItem to="/" icon="/assets/nav_home_glass_1765726281369.png" label="Home" />
             <DockItem to="/projects" icon="📁" label="Projects" />
             <DockItem to="/clients" icon="👥" label="Clients" />
-            <DockItem to="/design" icon="🎨" label="Design" />
-            <DockItem to="/estimation" icon="💰" label="Finance" />
+            <DockItem to="/design" icon="/assets/nav_design_glass_1765726295956.png" label="Design" />
+            <DockItem to="/estimation" icon="/assets/nav_estimate_glass_1765726314997.png" label="Finance" />
         </div>
     );
 };
 
 const DockItem = ({ to, icon, label }) => {
+    const isImage = icon.includes('.png');
     return (
         <NavLink
             to={to}
@@ -49,7 +50,11 @@ const DockItem = ({ to, icon, label }) => {
                 position: 'relative'
             })}
         >
-            <span style={{ fontSize: '24px', marginBottom: '2px' }}>{icon}</span>
+            {isImage ? (
+                <img src={icon} alt={label} style={{ width: '28px', height: '28px', marginBottom: '2px', objectFit: 'contain' }} />
+            ) : (
+                <span style={{ fontSize: '24px', marginBottom: '2px' }}>{icon}</span>
+            )}
             <span style={{ fontSize: '9px', fontWeight: '600', opacity: 0.8 }}>{label}</span>
         </NavLink>
     );

@@ -114,16 +114,26 @@ function DesignPresets({ onPresetSelect }) {
       <div className="preset-section">
         <h3>Тип недвижимости</h3>
         <div className="preset-grid">
-          {presets.property_types.map(type => (
-            <div
-              key={type.value}
-              className={`preset-card ${selectedType === type.value ? 'selected' : ''}`}
-              onClick={() => setSelectedType(type.value)}
-            >
-              <span className="icon">{type.icon}</span>
-              <span className="label">{type.label}</span>
-            </div>
-          ))}
+          {presets.property_types.map(type => {
+            let iconSrc = null;
+            if (type.value === 'villa') iconSrc = '/assets/preset_villa_gold_1765726333871.png';
+            else if (type.value === 'apartment') iconSrc = '/assets/preset_apartment_gold_1765726349490.png';
+
+            return (
+              <div
+                key={type.value}
+                className={`preset-card ${selectedType === type.value ? 'selected' : ''}`}
+                onClick={() => setSelectedType(type.value)}
+              >
+                {iconSrc ? (
+                  <img src={iconSrc} alt={type.label} className="icon" style={{ width: '64px', height: '64px', objectFit: 'contain', margin: '0 auto 15px' }} />
+                ) : (
+                  <span className="icon">{type.icon}</span>
+                )}
+                <span className="label">{type.label}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
 

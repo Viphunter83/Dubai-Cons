@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import config from '../config'
+import { useNavigate } from 'react-router-dom'
 import './Projects.css'
 
 function Projects() {
+  const navigate = useNavigate()
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -29,11 +31,16 @@ function Projects() {
   return (
     <div className="projects">
       <div className="container">
-        <h1>Projects</h1>
+        <h1 className="text-gradient-gold" style={{ marginBottom: '2rem' }}>Projects</h1>
 
         <div className="projects-grid">
           {projects.map(project => (
-            <div key={project.id} className="project-card">
+            <div
+              key={project.id}
+              className="project-card"
+              onClick={() => navigate(`/projects/${project.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <h3>{project.title}</h3>
               <p>{project.description}</p>
               <div className="project-details">

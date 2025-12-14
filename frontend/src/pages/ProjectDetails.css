@@ -1,0 +1,113 @@
+.project-details-page {
+    padding: 80px 0 120px;
+    min-height: 100vh;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.dashboard-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+
+.dashboard-card h3 .icon {
+    font-size: 1.5rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.detail-row .label {
+    color: var(--text-secondary);
+}
+
+.detail-row .value {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Compliance Card Specifics */
+.compliance-status {
+    padding: 15px;
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.03);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.compliance-status.verified {
+    background: rgba(0, 242, 234, 0.1);
+    border: 1px solid rgba(0, 242, 234, 0.3);
+    color: #00f2ea;
+}
+
+.compliance-status.warning {
+    background: rgba(255, 0, 85, 0.1);
+    border: 1px solid rgba(255, 0, 85, 0.3);
+    color: #ff0055;
+}
+
+.rag-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #6f42c1, #8e44ad);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-left: auto;
+}
+
+/* Actions */
+.action-grid {
+    display: grid;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.project-title h1 {
+    margin-bottom: 5px;
+}
+
+.project-meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}

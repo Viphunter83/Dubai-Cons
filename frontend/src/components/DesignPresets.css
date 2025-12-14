@@ -132,14 +132,10 @@
   transform: scale(1.1);
 }
 
-.btn {
-  font-family: 'Outfit', sans-serif;
-}
-
+/* Button styles inherited from index.css */
 .btn-primary {
   margin-top: 20px;
   width: 100%;
   padding: 15px;
   font-size: 1.1rem;
-  letter-spacing: 1px;
 }
