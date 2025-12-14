@@ -65,21 +65,33 @@ const Room = ({ width = 10, depth = 10, height = 3, color = '#f0f0f0', designIma
             </mesh>
             <gridHelper args={[Math.max(width, depth), Math.max(width, depth)]} position={[0, 0.01, 0]} />
 
-            {/* Back Wall (Feature Wall) */}
+            {/* Back Wall (Feature Wall) - With Error Handling for Texture */}
             <Suspense fallback={
-                <mesh position={[0, height / 2, -depth / 2]}>
+                <mesh position={[0, height / 2, -depth / 2]} receiveShadow>
                     <boxGeometry args={[width, height, 0.2]} />
                     <meshStandardMaterial color={color} />
                 </mesh>
             }>
-                {designImageUrl ? (
-                    <FeatureWall width={width} height={height} depth={depth} color={color} imageUrl={designImageUrl} />
-                ) : (
+                <ErrorBoundary fallback={
                     <mesh position={[0, height / 2, -depth / 2]} receiveShadow castShadow>
                         <boxGeometry args={[width, height, 0.2]} />
                         <meshStandardMaterial color={color} />
+                        <Html position={[0, height / 2, 0]} center transform sprite>
+                            <div style={{ color: 'white', background: 'rgba(255,0,0,0.7)', padding: '2px 5px', borderRadius: '4px', fontSize: '10px' }}>
+                                Texture Failed
+                            </div>
+                        </Html>
                     </mesh>
-                )}
+                }>
+                    {designImageUrl ? (
+                        <FeatureWall width={width} height={height} depth={depth} color={color} imageUrl={designImageUrl} />
+                    ) : (
+                        <mesh position={[0, height / 2, -depth / 2]} receiveShadow castShadow>
+                            <boxGeometry args={[width, height, 0.2]} />
+                            <meshStandardMaterial color={color} />
+                        </mesh>
+                    )}
+                </ErrorBoundary>
             </Suspense>
 
             {/* Left Wall */}

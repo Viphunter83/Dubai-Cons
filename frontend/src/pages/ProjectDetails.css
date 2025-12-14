@@ -1,113 +1,253 @@
 .project-details-page {
     padding: 80px 0 120px;
     min-height: 100vh;
+    /* Cinematic Background - Fixed Path */
+    background:
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(10, 10, 10, 0.95)),
+        url('/assets/bg-luxury.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
 }
 
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-    margin-top: 30px;
+.container {
+    max-width: 1400px;
+    /* Wider container for enterprise feel */
+    margin: 0 auto;
+    padding: 0 40px;
 }
 
-.dashboard-card {
-    background: var(--bg-card);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: var(--glass-border);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    transition: all 0.3s ease;
-}
-
-.dashboard-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.dashboard-card h3 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    color: var(--text-primary);
-    font-size: 1.2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 15px;
-}
-
-.dashboard-card h3 .icon {
-    font-size: 1.5rem;
-}
-
-.detail-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-}
-
-.detail-row .label {
-    color: var(--text-secondary);
-}
-
-.detail-row .value {
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
-/* Compliance Card Specifics */
-.compliance-status {
-    padding: 15px;
-    border-radius: var(--radius-sm);
-    background: rgba(255, 255, 255, 0.03);
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-.compliance-status.verified {
-    background: rgba(0, 242, 234, 0.1);
-    border: 1px solid rgba(0, 242, 234, 0.3);
-    color: #00f2ea;
-}
-
-.compliance-status.warning {
-    background: rgba(255, 0, 85, 0.1);
-    border: 1px solid rgba(255, 0, 85, 0.3);
-    color: #ff0055;
-}
-
-.rag-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 4px;
-    background: linear-gradient(90deg, #6f42c1, #8e44ad);
-    color: white;
-    font-size: 0.7rem;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-    margin-left: auto;
-}
-
-/* Actions */
-.action-grid {
-    display: grid;
-    gap: 10px;
-    margin-top: 15px;
-}
-
+/* Header */
 .header-actions {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
+    margin-bottom: 60px;
+    padding: 30px;
+    background: rgba(20, 20, 20, 0.6);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
 }
 
-.project-title h1 {
-    margin-bottom: 5px;
+.header-text h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.project-meta {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+.project-meta-large {
+    color: #888;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+
+.status-pill {
+    background: rgba(212, 175, 55, 0.1);
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: #d4af37;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+/* Wizard Styles - STRICT SYMMETRY GRID */
+.wizard-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    /* Exact 3 columns */
+    gap: 40px;
+    /* Equal spacing */
+    position: relative;
+    margin-bottom: 80px;
+    align-items: start;
+}
+
+/* Connecting Line behind steps */
+.wizard-line {
+    position: absolute;
+    top: 30px;
+    /* Aligns with circle center (60px/2) */
+    left: 16%;
+    /* Start from center of first col */
+    right: 16%;
+    /* End at center of last col */
+    height: 2px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(212, 175, 55, 0.4) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
+    z-index: 0;
+}
+
+.wizard-step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    /* Full height for alignment */
+}
+
+/* Step Circle */
+.step-circle {
+    width: 60px;
+    height: 60px;
+    background: #0f0f0f;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #666;
+    margin-bottom: 30px;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Step Content Card */
+.step-content {
+    background: rgba(30, 30, 30, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 30px;
+    width: 100%;
+    min-height: 220px;
+    /* Enforce equal height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+
+.step-content h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ccc;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* Active State */
+.wizard-step.active .step-circle {
+    border-color: #d4af37;
+    color: #d4af37;
+    background: #141414;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+    transform: scale(1.1);
+}
+
+.wizard-step.active .step-content {
+    background: rgba(212, 175, 55, 0.03);
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    transform: translateY(-5px);
+}
+
+.wizard-step.active h3 {
+    color: #fff;
+}
+
+/* Completed State */
+.wizard-step.completed .step-circle {
+    background: #d4af37;
+    border-color: #d4af37;
+    color: #000;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
+
+.wizard-step.completed .step-content {
+    border-color: rgba(0, 242, 234, 0.3);
+    background: rgba(0, 242, 234, 0.02);
+}
+
+/* Locked State */
+.wizard-step.locked .step-circle {
+    opacity: 0.3;
+}
+
+.wizard-step.locked .step-content {
+    opacity: 0.3;
+    pointer-events: none;
+    background: transparent;
+    border-style: dashed;
+}
+
+/* Buttons inside Cards */
+.step-content button {
+    width: auto;
+    /* Don't stretch */
+    min-width: 140px;
+    margin-top: 10px;
+}
+
+.pulse-btn {
+    background: #d4af37;
+    color: black;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 30px;
+    animation: pulse-gold 2s infinite;
+}
+
+.step-done p {
+    color: #00f2ea;
+    font-weight: 600;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+@keyframes pulse-gold {
+    0% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(212, 175, 55, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+    }
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 Columns match wizard */
+    gap: 40px;
+}
+
+.dashboard-card {
+    background: rgba(20, 20, 20, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 30px;
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+}
+
+.dashboard-card h3 {
+    color: #d4af37;
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
 }

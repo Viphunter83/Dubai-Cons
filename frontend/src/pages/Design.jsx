@@ -40,16 +40,49 @@ function Design() {
     }
   }, [result])
 
+  // Read projectId from URL
+  const [projectId, setProjectId] = useState(null)
+  const [projectTitle, setProjectTitle] = useState('')
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const pid = params.get('projectId')
+    if (pid) {
+      setProjectId(pid)
+      fetchProjectDetails(pid)
+    }
+  }, [])
+
+  const fetchProjectDetails = async (pid) => {
+    try {
+      const res = await axios.get(`${config.apiBaseUrl}/projects/${pid}`)
+      setProjectTitle(res.data.title)
+      // Prefill details from project
+      setDesignData(prev => ({
+        ...prev,
+        project_details: `${res.data.property_type || 'Luxury Villa'} in ${res.data.location || 'Dubai'}. Area: ${res.data.area} sqm. Budget: AED ${res.data.budget?.toLocaleString()}.`
+      }))
+      // Set text mode by default if project is loaded
+      setMode('text')
+    } catch (e) {
+      console.error("Failed to fetch project for design context", e)
+    }
+  }
+
   const handlePresetSelect = async (presetData) => {
     setLoading(true)
     setResult(null)
     setError(null)
 
     try {
-      const response = await axios.post(`${config.apiBaseUrl}/design/generate-by-presets`, presetData)
+      // Add projectId if exists
+      const dataToSend = { ...presetData, project_id: projectId ? parseInt(projectId) : null }
+
+      const response = await axios.post(`${config.apiBaseUrl}/design/generate-by-presets`, dataToSend)
       const designResult = response.data
       setResult(designResult)
-      // Сохраняем в localStorage
+
+      // Save to localStorage
       localStorage.setItem('lastDesignResult', JSON.stringify(designResult))
       localStorage.setItem('lastDesignTime', new Date().toISOString())
     } catch (error) {
@@ -66,7 +99,13 @@ function Design() {
     setError(null)
 
     try {
-      const response = await axios.post(`${config.apiBaseUrl}/design/generate`, designData)
+      // Inject project_id
+      const payload = {
+        ...designData,
+        project_id: projectId ? parseInt(projectId) : null
+      }
+
+      const response = await axios.post(`${config.apiBaseUrl}/design/generate`, payload)
       setResult(response.data)
     } catch (error) {
       console.error('Error generating design:', error)
@@ -118,7 +157,10 @@ function Design() {
   return (
     <div className="design">
       <div className="container">
-        <h1>AI Design Generator</h1>
+        <h1>
+          AI Design Generator
+          {projectTitle && <span style={{ display: 'block', fontSize: '1rem', color: '#d4af37', marginTop: '5px' }}>for Project: {projectTitle}</span>}
+        </h1>
 
         <div className="mode-selector">
           <button

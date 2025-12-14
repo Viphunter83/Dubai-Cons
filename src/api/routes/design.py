@@ -218,6 +218,24 @@ async def validate_compliance(request: DesignRequest):
         )
 
 
+@router.get("/project/{project_id}", response_model=Optional[DesignResponse])
+async def get_project_design(project_id: int, db: Session = Depends(get_db)):
+    """Get latest design concept for a project"""
+    concept = db.query(DesignConcept).filter(
+        DesignConcept.project_id == project_id
+    ).order_by(DesignConcept.created_at.desc()).first()
+    
+    if not concept:
+        # Return none or 404? 
+        # For frontend logic, returning null/204 is easier, but FastAPI prefers explicit 404 or explicit None return.
+        # Let's return None (null in JSON) if allowed, otherwise 404.
+        # Allow 404 for "Not Found" state handling
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No design found for this project"
+        )
+    return concept
+
 @router.get("/concept/{concept_id}", response_model=DesignResponse)
 async def get_design_concept(concept_id: int, db: Session = Depends(get_db)):
     """Get design concept by ID"""

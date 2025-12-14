@@ -1,33 +1,47 @@
-from fastapi import APIRouter, HTTPException, Depends
-from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
-from typing import Dict, Any, Optional
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import Response
+from sqlalchemy.orm import Session
+from database.connection import get_db
+from database.models import Project, DesignConcept, Estimation
 from services.report_service import report_service
-from datetime import datetime
 
 router = APIRouter()
 
-class ReportRequest(BaseModel):
-    project_details: Optional[Dict[str, Any]] = {}
-    design_result: Dict[str, Any]
+@router.get("/project/{project_id}/master")
+async def generate_project_master_report(
+    project_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    Generate and download a Master PDF Report for the project
+    """
+    # 1. Fetch Project
+    project = db.query(Project).filter(Project.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    
+    # 2. Fetch Design (Latest)
+    design = db.query(DesignConcept).filter(
+        DesignConcept.project_id == project_id
+    ).order_by(DesignConcept.created_at.desc()).first()
 
-@router.post("/generate", response_class=StreamingResponse)
-async def generate_report(request: ReportRequest):
-    """
-    Generate a PDF report for the given design
-    """
+    # 3. Fetch Estimation
+    estimation = db.query(Estimation).filter(
+        Estimation.project_id == project_id
+    ).first()
+
     try:
-        pdf_buffer = report_service.generate_project_report(
-            project_data=request.project_details,
-            design_result=request.design_result
-        )
+        pdf_bytes = report_service.generate_master_report(project, design, estimation)
         
-        filename = f"DubaiCons_Report_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+        filename = f"MasterReport_{project.title.replace(' ', '_')}.pdf"
         
-        return StreamingResponse(
-            pdf_buffer, 
+        return Response(
+            content=pdf_bytes,
             media_type="application/pdf",
-            headers={"Content-Disposition": f"attachment; filename={filename}"}
+            headers={
+                "Content-Disposition": f"attachment; filename={filename}"
+            }
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error generating PDF: {e}")
+        raise HTTPException(status_code=500, detail="Failed to generate PDF report")
