@@ -8,11 +8,7 @@
 }
 
 .estimation h1 {
-  color: #333;
-  margin-bottom: 30px;
-}
-
-.estimation-controls {
+  color: var(--text-primary);
   margin-bottom: 30px;
 }
 
@@ -23,21 +19,27 @@
 }
 
 .project-card {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-gold);
 }
 
 .project-card h4 {
   margin: 0 0 10px 0;
-  color: #333;
+  color: var(--accent-cyan);
 }
 
 .project-card p {
   margin: 5px 0;
-  color: #666;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
@@ -47,58 +49,17 @@
   gap: 10px;
 }
 
-.btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s;
-}
-
-.btn-primary {
-  background: #007bff;
-  color: white;
-}
-
-.btn-primary:hover {
-  background: #0056b3;
-}
-
-.btn-primary:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: #5a6268;
-}
-
-.error-message {
-  background: #fee;
-  border: 1px solid #fcc;
-  border-radius: 5px;
-  padding: 15px;
-  margin: 20px 0;
-  color: #c33;
-}
-
 .estimation-result {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
   padding: 30px;
   margin-top: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .estimation-result h2 {
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 20px;
 }
 
@@ -110,17 +71,18 @@
 }
 
 .summary-card {
-  background: #f8f9fa;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
   padding: 20px;
   text-align: center;
 }
 
 .summary-card.total {
-  background: #007bff;
-  color: white;
+  background: linear-gradient(135deg, var(--accent-gold), #b89628);
+  color: #000;
   border: none;
+  box-shadow: var(--shadow-glow);
 }
 
 .summary-card h3 {
@@ -147,12 +109,14 @@
 }
 
 .estimation-breakdown h3 {
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
 }
 
 .estimation-breakdown h4 {
-  color: #666;
+  color: var(--text-secondary);
   margin: 20px 0 10px 0;
   font-size: 16px;
 }
@@ -166,17 +130,17 @@
 .category-item {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
-  background: #f8f9fa;
-  border-radius: 4px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .category-item span:first-child {
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .category-item span:last-child {
   font-weight: bold;
-  color: #333;
+  color: var(--accent-cyan);
 }
-

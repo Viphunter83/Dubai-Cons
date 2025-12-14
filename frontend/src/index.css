@@ -1,3 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+:root {
+  /* Branding Colors */
+  --bg-dark: #0f0f13;
+  --bg-card: rgba(255, 255, 255, 0.03);
+  --bg-glass: rgba(20, 20, 25, 0.7);
+
+  --accent-gold: #d4af37;
+  --accent-cyan: #00f2ea;
+  --accent-magenta: #ff0055;
+
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b0;
+
+  /* Utilities */
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --shadow-glow: 0 0 20px rgba(212, 175, 55, 0.15);
+  --radius-lg: 16px;
+  --radius-sm: 8px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,15 +27,31 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(0, 242, 234, 0.05) 0%, transparent 20%);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-gold);
 }

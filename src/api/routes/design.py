@@ -200,6 +200,24 @@ async def generate_design(
     )
 
 
+@router.post("/validate-compliance")
+async def validate_compliance(request: DesignRequest):
+    """
+    Check design request against Dubai building codes without generating full design
+    """
+    try:
+        compliance_result = compliance_service.check_design_compliance({
+            "project_details": request.project_details,
+            "client_preferences": request.client_preferences
+        })
+        return compliance_result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Compliance check failed: {str(e)}"
+        )
+
+
 @router.get("/concept/{concept_id}", response_model=DesignResponse)
 async def get_design_concept(concept_id: int, db: Session = Depends(get_db)):
     """Get design concept by ID"""

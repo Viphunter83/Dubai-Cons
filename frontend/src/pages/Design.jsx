@@ -164,25 +164,25 @@ function Design() {
               alignItems: 'center',
               gap: '10px',
               margin: '15px 0',
-              padding: '10px',
-              background: 'linear-gradient(to right, #f8f9fa, #e9ecef)',
+              padding: '12px',
+              background: 'rgba(212, 175, 55, 0.1)',
               borderRadius: '8px',
-              border: '1px solid #dee2e6'
+              border: '1px solid rgba(212, 175, 55, 0.2)'
             }}>
               <input
                 type="checkbox"
                 id="proModel"
                 checked={designData.use_pro_for_image}
                 onChange={(e) => setDesignData({ ...designData, use_pro_for_image: e.target.checked })}
-                style={{ width: '20px', height: '20px' }}
+                style={{ width: '20px', height: '20px', accentColor: '#d4af37' }}
               />
-              <label htmlFor="proModel" style={{ margin: 0, fontWeight: 'bold', color: '#333' }}>
+              <label htmlFor="proModel" style={{ margin: 0, fontWeight: 'bold', color: '#fff' }}>
                 ⚡ Use Nano Banana Pro (Official Gemini 3.0 Pro)
                 <span style={{
                   display: 'block',
                   fontSize: '12px',
                   fontWeight: 'normal',
-                  color: '#666',
+                  color: 'rgba(255,255,255,0.7)',
                   marginTop: '2px'
                 }}>
                   Enables high-fidelity 4K renders and advanced reasoning
@@ -190,20 +190,42 @@ function Design() {
               </label>
             </div>
 
-            <button className="btn btn-primary" onClick={handleGenerate} disabled={loading}>
-              {loading ? 'Generating...' : 'Generate Design Concept'}
-            </button>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <button className="btn btn-primary" onClick={handleGenerate} disabled={loading} style={{ flex: 1 }}>
+                {loading ? 'Generating...' : 'Generate Design Concept'}
+              </button>
+              <button
+                className="btn btn-outline-secondary"
+                onClick={async () => {
+                  setLoading(true);
+                  setError(null);
+                  try {
+                    const res = await axios.post(`${config.apiBaseUrl}/design/validate-compliance`, designData);
+                    const report = res.data;
+                    alert(`🛡️ Compliance Report:\nStatus: ${report.status}\n\nIssues: ${JSON.stringify(report.issues || [])}\n\nRecommendation: ${report.recommendation || 'None'}`);
+                  } catch (e) {
+                    alert("Error checking compliance: " + e.message);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                style={{ flex: 0.5, borderColor: '#00f2ea', color: '#00f2ea' }}
+              >
+                🛡️ Check Code
+              </button>
+            </div>
           </div>
         )}
 
         {error && (
           <div className="error-message" style={{
             padding: '15px',
-            backgroundColor: '#fee',
-            border: '1px solid #fcc',
+            backgroundColor: 'rgba(255, 0, 85, 0.1)',
+            border: '1px solid #ff0055',
             borderRadius: '5px',
             marginTop: '20px',
-            color: '#c33'
+            color: '#ff0055'
           }}>
             <h3>❌ Error</h3>
             <p>{error}</p>
@@ -216,8 +238,8 @@ function Design() {
             textAlign: 'center',
             marginTop: '20px'
           }}>
-            <p>⏳ Генерация дизайна в процессе...</p>
-            <p style={{ color: '#666', fontSize: '14px' }}>
+            <p style={{ color: '#d4af37', fontSize: '1.2rem' }}>⏳ Генерация дизайна в процессе...</p>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px' }}>
               AI генерирует концепцию дизайна. Это может занять 30-60 секунд.
               Пожалуйста, подождите...
             </p>

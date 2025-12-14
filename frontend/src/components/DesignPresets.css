@@ -3,143 +3,143 @@
 }
 
 .design-presets h2 {
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 30px;
+  font-size: 1.5rem;
+  border-left: 4px solid var(--accent-gold);
+  padding-left: 15px;
 }
 
 .preset-section {
   margin-bottom: 30px;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  padding: 25px;
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: var(--glass-border);
 }
 
 .preset-section h3 {
-  color: #333;
-  margin-bottom: 15px;
-  font-size: 18px;
+  color: var(--accent-cyan);
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .preset-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
+  gap: 20px;
 }
 
 .preset-card {
-  background: white;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 20px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .preset-card:hover {
-  border-color: #007bff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: var(--accent-gold);
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+  background: rgba(212, 175, 55, 0.05);
 }
 
 .preset-card.selected {
-  border-color: #007bff;
-  background: #e7f3ff;
+  border-color: var(--accent-gold);
+  background: rgba(212, 175, 55, 0.1);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.preset-card.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--accent-gold);
+  font-weight: bold;
 }
 
 .preset-card .icon {
   font-size: 32px;
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  transition: transform 0.3s;
+}
+
+.preset-card:hover .icon {
+  transform: scale(1.1);
 }
 
 .preset-card .label {
-  font-weight: bold;
+  font-weight: 600;
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
 }
 
 .preset-card .description {
   font-size: 12px;
-  color: #666;
+  color: var(--text-secondary);
+  line-height: 1.4;
   margin: 0;
 }
 
 .room-input {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 15px;
+  margin-bottom: 15px;
   align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .room-type-select,
 .room-quantity-input,
-.room-area-input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.room-area-input,
+.budget-select,
+.additional-prefs {
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .btn-remove {
-  background: #dc3545;
-  color: white;
-  border: none;
+  background: rgba(255, 0, 85, 0.1);
+  color: #ff0055;
+  border: 1px solid rgba(255, 0, 85, 0.3);
   border-radius: 4px;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   cursor: pointer;
   font-size: 18px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-remove:hover {
-  background: #c82333;
-}
-
-.budget-select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.additional-prefs {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: inherit;
+  background: rgba(255, 0, 85, 0.2);
+  border-color: #ff0055;
+  transform: scale(1.1);
 }
 
 .btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s;
+  font-family: 'Outfit', sans-serif;
 }
 
 .btn-primary {
-  background: #007bff;
-  color: white;
+  margin-top: 20px;
   width: 100%;
-  font-size: 16px;
-  font-weight: bold;
+  padding: 15px;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
 }
-
-.btn-primary:hover {
-  background: #0056b3;
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: #5a6268;
-}
-

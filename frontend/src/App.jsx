@@ -7,22 +7,13 @@ import Clients from './pages/Clients'
 import Design from './pages/Design'
 import Estimation from './pages/Estimation'
 
+import FloatingDock from './components/FloatingDock'
+
 function App() {
   return (
     <Router>
       <div className="app">
-        <header className="app-header">
-          <div className="container">
-            <h1>Dubai Cons AI Suite</h1>
-            <nav>
-              <Link to="/">Home</Link>
-              <Link to="/projects">Projects</Link>
-              <Link to="/clients">Clients</Link>
-              <Link to="/design">Design</Link>
-              <Link to="/estimation">Estimation</Link>
-            </nav>
-          </div>
-        </header>
+        {/* Removed Top Header */}
 
         <main className="main-content">
           <Routes>
@@ -34,11 +25,7 @@ function App() {
           </Routes>
         </main>
 
-        <footer className="app-footer">
-          <div className="container">
-            <p>&copy; 2025 Dubai Cons - AI Suite MVP</p>
-          </div>
-        </footer>
+        <FloatingDock />
       </div>
     </Router>
   )
