@@ -1,0 +1,81 @@
+{
+    "flooring": {
+        "standard": {
+            "name": "Ceramic Tiles",
+            "cost_per_sqm": 120,
+            "description": "Standard 60x60 ceramic tiles"
+        },
+        "premium": {
+            "name": "Engineered Wood / High-end Porcelain",
+            "cost_per_sqm": 350,
+            "description": "European oak or large format porcelain"
+        },
+        "luxury": {
+            "name": "Italian Marble",
+            "cost_per_sqm": 850,
+            "description": "Statutario or Calacatta marble"
+        }
+    },
+    "wall": {
+        "standard": {
+            "name": "Premium Emulsion Paint",
+            "cost_per_sqm": 45,
+            "description": "Jotun Fenomastic or equivalent"
+        },
+        "premium": {
+            "name": "Wallpaper / Decor Paint",
+            "cost_per_sqm": 150,
+            "description": "Fabric backed vinyl or textured paint"
+        },
+        "luxury": {
+            "name": "Wood Cladding / Stone Veneer",
+            "cost_per_sqm": 450,
+            "description": "Natural wood panels or stone sheets"
+        }
+    },
+    "ceiling": {
+        "standard": {
+            "name": "Plain Gypsum",
+            "cost_per_sqm": 110,
+            "description": "Flat gypsum ceiling with shadow gaps"
+        },
+        "premium": {
+            "name": "Design Gypsum + Cove Light",
+            "cost_per_sqm": 220,
+            "description": "Multi-level gypsum with LED strips"
+        },
+        "luxury": {
+            "name": "Wood / Metal Baffle Ceiling",
+            "cost_per_sqm": 500,
+            "description": "Custom timber slats or metal mesh"
+        }
+    },
+    "labor": {
+        "standard": {
+            "cost_per_sqm": 400,
+            "description": "Standard fit-out team"
+        },
+        "premium": {
+            "cost_per_sqm": 600,
+            "description": "Experienced specialized team"
+        },
+        "luxury": {
+            "cost_per_sqm": 1000,
+            "description": "Master craftsmen & European supervision"
+        }
+    },
+    "mep": {
+        "standard": {
+            "cost_per_sqm": 350,
+            "description": "Basic HVAC & Electrical upgrades"
+        },
+        "premium": {
+            "cost_per_sqm": 650,
+            "description": "New FCU units & Smart lighting ready"
+        },
+        "luxury": {
+            "cost_per_sqm": 1200,
+            "description": "VRF system & Full Home Automation cabling"
+        }
+    }
+}

@@ -3,9 +3,10 @@ import sys
 import os
 from unittest.mock import MagicMock, patch
 
-# Mock google.generativeai before importing anything that uses it
+# Mock google.genai before importing anything that uses it
 sys.modules['google'] = MagicMock()
-sys.modules['google.generativeai'] = MagicMock()
+sys.modules['google.genai'] = MagicMock()
+sys.modules['google.genai.types'] = MagicMock()
 
 # Add src to path
 sys.path.append(os.path.join(os.getcwd(), 'src'))
@@ -57,6 +58,23 @@ async def test_integration():
              print("✅ Pro Model: PASSED")
         else:
              print(f"❌ Pro Model: FAILED. Result: {result_pro}")
+
+        # Test Case 3: Pro Model Fallback
+        print("\n📋 Test Case 3: Pro Model Fallback")
+        # Configure mock to fail for Gemini but succeed for Standard
+        mock_gemini.generate_image.side_effect = Exception("Gemini API Error")
+        
+        result_fallback = await service.generate_design_concept(
+            "preferences", "details", model_type="pro"
+        )
+        
+        # Should fallback to standard image
+        if result_fallback["image_url"] == "http://standard-image.com" and \
+           result_fallback["model_used"] == "Standard AI":  # It falls back to standard model name? Or keeps pro?
+             # Based on logic: final_model_used = "Standard AI" if fallback used
+             print("✅ Pro Model Fallback: PASSED")
+        else:
+             print(f"❌ Pro Model Fallback: FAILED. Result: {result_fallback}")
 
 if __name__ == "__main__":
     asyncio.run(test_integration())

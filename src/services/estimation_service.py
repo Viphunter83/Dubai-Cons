@@ -11,138 +11,143 @@ class EstimationService:
     Based on area, property type, design complexity
     """
     
-    # Cost per square meter for different property types (AED)
-    BASE_COSTS = {
-        "villa": 2500,  # High-end villas
-        "apartment": 1800,  # Standard apartments
-        "penthouse": 3000,  # Luxury penthouses
-        "office": 1200,  # Commercial offices
-        "restaurant": 2000,  # HoReCa
-        "retail": 1500,  # Retail spaces
-    }
-    
-    # Cost multipliers based on segment
-    SEGMENT_MULTIPLIERS = {
-        "luxury": 1.5,  # +50% for luxury
-        "commercial": 1.0,  # Standard
-        "renovation": 0.7,  # -30% for renovations
-    }
-    
-    # Category percentage distribution
-    CATEGORY_PERCENTAGES = {
-        "flooring": 0.15,  # 15%
-        "wall": 0.12,  # 12%
-        "ceiling": 0.08,  # 8%
-        "electrical": 0.10,  # 10%
-        "plumbing": 0.08,  # 8%
-        "hvac": 0.12,  # 12%
-        "furniture": 0.20,  # 20%
-        "lighting": 0.05,  # 5%
-        "decoration": 0.10,  # 10%
-    }
-    
+    def __init__(self):
+        self.materials_db = self._load_materials_db()
+
+    def _load_materials_db(self) -> Dict[str, Any]:
+        import json
+        import os
+        try:
+            # Adjust path relative to this file or project root
+            # Assuming src/services/estimation_service.py -> src/data/materials_db.json
+            base_path = os.path.dirname(os.path.dirname(__file__))
+            db_path = os.path.join(base_path, "data", "materials_db.json")
+            with open(db_path, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading materials DB: {e}. Using fallback.")
+            return {}
+
     def calculate_estimation(
         self,
         project: Any,
         design_concept: Optional[Any] = None
     ) -> Dict[str, Any]:
         """
-        Calculate cost estimation for a project
-        
-        Args:
-            project: Project object
-            design_concept: Optional design concept
-            
-        Returns:
-            Dictionary with cost breakdown
+        Calculate cost estimation for a project using Material DB
         """
-        # Base calculation
-        property_type = project.property_type or "apartment"
-        area = project.area or 100.0  # Default 100 sqm
+        area = project.area or 100.0
         
-        # Get base cost per sqm
-        base_cost_per_sqm = self.BASE_COSTS.get(property_type, 1800)
+        # Determine Tier
+        tier = "standard"
+        segment = project.client.segment if project.client else "commercial"
+        style = design_concept.style.lower() if design_concept and design_concept.style else ""
         
-        # Apply segment multiplier
-        segment_multiplier = self.SEGMENT_MULTIPLIERS.get(
-            project.client.segment if project.client else "commercial",
-            1.0
-        )
+        if segment == "luxury" or "luxury" in style or "royal" in style:
+            tier = "luxury"
+        elif segment == "premium" or "modern" in style or "contemporary" in style:
+            tier = "premium"
+            
+        # Fallback if DB missing
+        if not self.materials_db:
+             # ... existing simple fallback logic could go here or just defaults ...
+             pass
+             
+        db = self.materials_db
         
-        # Calculate total base cost
-        total_base_cost = area * base_cost_per_sqm * segment_multiplier
+        # Calculate Category Costs properly
+        # Flooring
+        flooring_item = db.get("flooring", {}).get(tier, {"cost_per_sqm": 150})
+        flooring_cost = area * flooring_item["cost_per_sqm"]
         
-        # Calculate category costs
-        category_costs = {}
-        for category, percentage in self.CATEGORY_PERCENTAGES.items():
-            category_costs[f"{category}_cost"] = total_base_cost * percentage
+        # Wall (Assuming wall area is roughly 3x floor area for estimation)
+        wall_area = area * 3.0
+        wall_item = db.get("wall", {}).get(tier, {"cost_per_sqm": 50})
+        wall_cost = wall_area * wall_item["cost_per_sqm"]
         
-        # Additional factors
-        complexity_multiplier = self._get_complexity_multiplier(project, design_concept)
+        # Ceiling
+        ceiling_item = db.get("ceiling", {}).get(tier, {"cost_per_sqm": 120})
+        ceiling_cost = area * ceiling_item["cost_per_sqm"]
         
-        materials_cost = total_base_cost * 0.4 * complexity_multiplier
-        labor_cost = total_base_cost * 0.35
-        additional_cost = total_base_cost * 0.25
+        # Labor
+        labor_item = db.get("labor", {}).get(tier, {"cost_per_sqm": 400})
+        labor_cost = area * labor_item["cost_per_sqm"]
         
-        # Total cost
+        # MEP (Mechanical, Electrical, Plumbing)
+        mep_item = db.get("mep", {}).get(tier, {"cost_per_sqm": 400})
+        mep_total = area * mep_item["cost_per_sqm"]
+        
+        # Distribute MEP roughly
+        electrical_cost = mep_total * 0.4
+        plumbing_cost = mep_total * 0.3
+        hvac_cost = mep_total * 0.3
+        
+        # Furniture & Decoration (Percentage of construction cost)
+        # Luxury needs higher % for furniture
+        furniture_factor = 0.4 if tier == "luxury" else 0.25
+        construction_subtotal = flooring_cost + wall_cost + ceiling_cost + labor_cost + mep_total
+        
+        furniture_cost = construction_subtotal * furniture_factor
+        lighting_cost = construction_subtotal * 0.05
+        decoration_cost = construction_subtotal * 0.08
+        
+        materials_cost = flooring_cost + wall_cost + ceiling_cost + mep_total + lighting_cost + decoration_cost + furniture_cost
+        
+        additional_cost = construction_subtotal * 0.15 # 15% for preliminaries, transport etc
+        
         total_cost = materials_cost + labor_cost + additional_cost
-        
-        # Create detailed breakdown
+
         breakdown = {
             "materials": {
-                "flooring": category_costs["flooring_cost"],
-                "wall": category_costs["wall_cost"],
-                "ceiling": category_costs["ceiling_cost"],
-                "electrical": category_costs["electrical_cost"],
-                "plumbing": category_costs["plumbing_cost"],
-                "hvac": category_costs["hvac_cost"],
-                "furniture": category_costs["furniture_cost"],
-                "lighting": category_costs["lighting_cost"],
-                "decoration": category_costs["decoration_cost"],
+                "flooring": flooring_cost,
+                "wall": wall_cost,
+                "ceiling": ceiling_cost,
+                "electrical": electrical_cost,
+                "plumbing": plumbing_cost,
+                "hvac": hvac_cost,
+                "furniture": furniture_cost,
+                "lighting": lighting_cost,
+                "decoration": decoration_cost,
             },
             "labor": {
-                "installation": labor_cost * 0.6,
-                "supervision": labor_cost * 0.3,
-                "finishing": labor_cost * 0.1,
+                "fitout_team": labor_cost
             },
             "additional": {
-                "transport": additional_cost * 0.2,
-                "waste_disposal": additional_cost * 0.15,
-                "permits": additional_cost * 0.1,
-                "insurance": additional_cost * 0.05,
-                "contingency": additional_cost * 0.5,
+                "preliminaries": additional_cost
             }
         }
         
         assumptions = [
-            f"Based on {property_type} property type",
+            f"Estimation Tier: {tier.upper()}",
+            f"Based on {project.property_type or 'General'} property",
             f"Area: {area} sqm",
-            f"Segment: {project.client.segment if project.client else 'Standard'}",
-            "Costs include materials, labor, and all project expenses",
-            "Prices valid for Dubai, UAE",
-            f"Complexity factor: {complexity_multiplier:.2f}x"
+            f"Flooring: {flooring_item.get('name', 'Standard')}",
+            f"Walls: {wall_item.get('name', 'Standard')}",
+            f"Ceiling: {ceiling_item.get('name', 'Standard')}",
+            "Includes Supply & Installation"
         ]
-        
+
         return {
             "project_id": project.id,
             "materials_cost": round(materials_cost, 2),
             "labor_cost": round(labor_cost, 2),
             "additional_cost": round(additional_cost, 2),
             "total_cost": round(total_cost, 2),
-            "flooring_cost": round(category_costs["flooring_cost"], 2),
-            "wall_cost": round(category_costs["wall_cost"], 2),
-            "ceiling_cost": round(category_costs["ceiling_cost"], 2),
-            "electrical_cost": round(category_costs["electrical_cost"], 2),
-            "plumbing_cost": round(category_costs["plumbing_cost"], 2),
-            "hvac_cost": round(category_costs["hvac_cost"], 2),
-            "furniture_cost": round(category_costs["furniture_cost"], 2),
-            "lighting_cost": round(category_costs["lighting_cost"], 2),
-            "decoration_cost": round(category_costs["decoration_cost"], 2),
+            "flooring_cost": round(flooring_cost, 2),
+            "wall_cost": round(wall_cost, 2),
+            "ceiling_cost": round(ceiling_cost, 2),
+            "electrical_cost": round(electrical_cost, 2),
+            "plumbing_cost": round(plumbing_cost, 2),
+            "hvac_cost": round(hvac_cost, 2),
+            "furniture_cost": round(furniture_cost, 2),
+            "lighting_cost": round(lighting_cost, 2),
+            "decoration_cost": round(decoration_cost, 2),
             "breakdown": breakdown,
             "assumptions": assumptions,
             "area": area,
-            "property_type": property_type,
-            "segment": project.client.segment if project.client else "commercial",
+            "property_type": project.property_type or "commercial",
+            "segment": segment,
+            "tier": tier
         }
     
     def _get_complexity_multiplier(self, project: Any, design_concept: Optional[Any]) -> float:

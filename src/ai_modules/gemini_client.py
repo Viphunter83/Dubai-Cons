@@ -48,8 +48,8 @@ class GeminiClient:
         try:
             logger.info(f"Generating image with prompt: {prompt}")
             
-            # Using Imagen 3.0 model
-            model_name = "imagen-3.0-generate-001"
+            # Using Imagen 4.0 Fast model (Preview)
+            model_name = "imagen-4.0-fast-generate-001"
             
             # Note: generate_images is synchronous in the SDK currently, 
             # but usually fast enough or we should run in threadpool if blocking.

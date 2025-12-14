@@ -59,61 +59,69 @@ class DesignAIService:
             
             # Generate image
             image_url = None
+            final_model_used = "Standard AI"
             
-            if model_type == "pro" and gemini_client.api_key_configured:
-                # Use Nano Banana Pro (Gemini)
-                try:
-                    image_prompt = get_image_generation_prompt(design_description)
-                    image_response = await gemini_client.generate_image(
-                        prompt=image_prompt
-                    )
-                    if image_response:
-                        image_url = image_response.get("image_url")
-                except Exception as e:
-                    print(f"Gemini generation failed: {e}")
-                    # Fallback to standard? Or just fail? Let's keep it null to indicate failure or handle graceful degradation in UI
-            else:
-                # Use Standard (DALL-E via ProxyAPI)
+            # Helper function for standard generation
+            async def generate_standard_image(desc):
                 max_retries = 3
                 for attempt in range(max_retries):
                     try:
-                        image_prompt = get_image_generation_prompt(design_description)
-                        image_response = await proxy_api_client.generate_image(
+                        img_prompt = get_image_generation_prompt(desc)
+                        img_response = await proxy_api_client.generate_image(
                             model=self.image_model,
-                            prompt=image_prompt,
+                            prompt=img_prompt,
                             size="1024x1024",
                             quality="hd"
                         )
-                        
-                        if image_response and "data" in image_response:
-                            image_url = image_response["data"][0]["url"]
-                            break  # Success
-                    except Exception as image_error:
-                        print(f"Error generating image (attempt {attempt + 1}/{max_retries}): {image_error}")
+                        if img_response and "data" in img_response:
+                            return img_response["data"][0]["url"]
+                    except Exception as e:
+                        print(f"Standard generation attempt {attempt + 1} failed: {e}")
                         if attempt < max_retries - 1:
-                            await asyncio.sleep(2)  # Wait 2 seconds before retry
-                        else:
-                            print("Image generation failed after all retries, trying Gemini fallback...")
-            
-            # Fallback to Gemini if Standard failed or if model_type was standard but failed
+                            await asyncio.sleep(2)
+                return None
+
+            # 1. Try Pro Mode (Gemini) if requested
+            if model_type == "pro":
+                if gemini_client.api_key_configured:
+                    try:
+                        print("Attempting to use Nano Banana Pro (Gemini)...")
+                        image_prompt = get_image_generation_prompt(design_description)
+                        image_response = await gemini_client.generate_image(
+                            prompt=image_prompt
+                        )
+                        if image_response and image_response.get("image_url"):
+                            image_url = image_response.get("image_url")
+                            final_model_used = "Nano Banana Pro"
+                    except Exception as e:
+                        print(f"Gemini generation failed: {e}")
+                        print("Falling back to Standard model...")
+                else:
+                    print("Gemini not configured. Falling back to Standard model...")
+
+            # 2. Fallback or Standard Mode
+            if not image_url:
+                image_url = await generate_standard_image(design_description)
+
+            # 3. Last Resort Fallback (Mock/Gemini default if everything else fails)
             if not image_url:
                 try:
-                    print("Attempting fallback to Gemini/Mock...")
+                    print("All standard methods failed. Attempting final fallback...")
+                    # This might return a mock if configured in gemini_client
                     image_prompt = get_image_generation_prompt(design_description)
-                    # We force call gemini even if not "pro" because we need an image (and it handles mocks)
                     image_response = await gemini_client.generate_image(prompt=image_prompt)
                     if image_response:
                         image_url = image_response.get("image_url")
-                        print(f"Fallback successful. URL: {image_url}")
+                        print(f"Final fallback successful. URL: {image_url}")
                 except Exception as e:
-                    print(f"Fallback to Gemini failed: {e}")
-            
+                    print(f"Final fallback failed: {e}")
+
             result_dict = {
                 "description": design_description,
                 "image_url": image_url,
                 "style": "Contemporary Luxury",
                 "color_scheme": "Neutral with gold accents",
-                "model_used": "Nano Banana Pro" if model_type == "pro" else "Standard AI"
+                "model_used": final_model_used
             }
             print(f"DEBUG: design_service return: {result_dict}")
             return result_dict
