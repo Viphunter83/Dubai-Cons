@@ -196,18 +196,41 @@ function Estimation() {
               </div>
             </div>
 
-            {estimation.breakdown && (
-              <div className="estimation-breakdown">
-                <h3>Detailed Breakdown</h3>
-                <div className="category-grid">
-                  {/* Simplified grid for brevity, logic remains same */}
-                  <div className="category-item"><span>Flooring</span><span>{formatCurrency(estimation.flooring_cost)}</span></div>
-                  <div className="category-item"><span>Walls</span><span>{formatCurrency(estimation.wall_cost)}</span></div>
-                  <div className="category-item"><span>Ceiling</span><span>{formatCurrency(estimation.ceiling_cost)}</span></div>
-                  <div className="category-item"><span>MEP</span><span>{formatCurrency(estimation.electrical_cost + estimation.plumbing_cost + estimation.hvac_cost)}</span></div>
+            <div className="estimation-breakdown">
+              <h3>Detailed Breakdown</h3>
+              <div className="category-grid">
+                <div className="category-item">
+                  <span>Flooring</span>
+                  <span>{formatCurrency(estimation.flooring_cost || estimation?.breakdown?.materials?.flooring || 0)}</span>
+                </div>
+                <div className="category-item">
+                  <span>Walls</span>
+                  <span>{formatCurrency(estimation.wall_cost || estimation?.breakdown?.materials?.wall || 0)}</span>
+                </div>
+                <div className="category-item">
+                  <span>Ceiling</span>
+                  <span>{formatCurrency(estimation.ceiling_cost || estimation?.breakdown?.materials?.ceiling || 0)}</span>
+                </div>
+                <div className="category-item">
+                  <span>MEP (Elec+Plumb+HVAC)</span>
+                  <span>
+                    {formatCurrency(
+                      (estimation.electrical_cost || estimation?.breakdown?.materials?.electrical || 0) +
+                      (estimation.plumbing_cost || estimation?.breakdown?.materials?.plumbing || 0) +
+                      (estimation.hvac_cost || estimation?.breakdown?.materials?.hvac || 0)
+                    )}
+                  </span>
+                </div>
+                <div className="category-item">
+                  <span>Lighting</span>
+                  <span>{formatCurrency(estimation.lighting_cost || estimation?.breakdown?.materials?.lighting || 0)}</span>
+                </div>
+                <div className="category-item">
+                  <span>Decoration</span>
+                  <span>{formatCurrency(estimation.decoration_cost || estimation?.breakdown?.materials?.decoration || 0)}</span>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         )}
       </div>

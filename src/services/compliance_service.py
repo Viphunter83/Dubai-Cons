@@ -1,6 +1,6 @@
 from typing import Dict, Any
 import os
-from ai_modules.rag_engine import RAGEngine
+# from ai_modules.rag_engine import RAGEngine
 
 # Path to the regulations file
 REGULATIONS_PATH = os.path.join(os.getcwd(), 'docs', 'regulations', 'dubai_building_code_summary.txt')
@@ -13,7 +13,12 @@ class ComplianceService:
         """Lazy load RAG engine"""
         if not self._rag_engine:
             print("⏳ Lazy loading RAG Engine...")
-            self._rag_engine = RAGEngine(docs_path=REGULATIONS_PATH)
+            try:
+                from ai_modules.rag_engine import RAGEngine
+                self._rag_engine = RAGEngine(docs_path=REGULATIONS_PATH)
+            except Exception as e:
+                print(f"⚠️ Failed to load RAGEngine: {e}")
+                self._rag_engine = None
         return self._rag_engine
 
     def check_design_compliance(self, design_data: Dict[str, Any]) -> Dict[str, Any]:

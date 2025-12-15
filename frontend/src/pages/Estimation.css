@@ -19,12 +19,13 @@
 }
 
 .project-card {
-  background: var(--bg-card);
+  background: rgba(30, 30, 30, 0.6);
   backdrop-filter: blur(12px);
-  border: var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
   padding: 20px;
   transition: all 0.3s ease;
+  color: #fff;
 }
 
 .project-card:hover {
@@ -79,10 +80,10 @@
 }
 
 .summary-card.total {
-  background: linear-gradient(135deg, var(--accent-gold), #b89628);
-  color: #000;
-  border: none;
-  box-shadow: var(--shadow-glow);
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--accent-gold);
+  border: 1px solid var(--accent-gold);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
 }
 
 .summary-card h3 {
@@ -123,24 +124,70 @@
 
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 15px;
 }
 
 .category-item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 15px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 15px;
 }
 
 .category-item span:first-child {
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.7);
+  flex: 1;
+  text-align: left;
+  line-height: 1.4;
 }
 
 .category-item span:last-child {
   font-weight: bold;
   color: var(--accent-cyan);
+  white-space: nowrap;
+}
+
+.category-item span:last-child {
+  font-weight: bold;
+  color: var(--accent-cyan);
+}
+
+/* Button overrides for better visibility */
+.estimation .btn {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.estimation .btn-primary {
+  background: var(--accent-gold);
+  color: #000;
+  border: none;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.estimation .btn-primary:hover {
+  background: #f0c420;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+.estimation .btn-secondary {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.estimation .btn-secondary:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }

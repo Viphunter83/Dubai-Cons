@@ -2,10 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const types = [
-    { id: 'villa', label: 'Luxury Villa', icon: '🏰', image: '/assets/preset_villa_gold_1765726333871.png' },
-    { id: 'apartment', label: 'Penthouse & Apt', icon: '🏢', image: '/assets/preset_apartment_gold_1765726349490.png' },
-    { id: 'office', label: 'Corporate Office', icon: '💼', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80' },
-    { id: 'retail', label: 'Retail & Showroom', icon: '🛍️', image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80' }
+    { id: 'villa', label: 'Роскошная вилла', icon: '🏰', image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80' },
+    { id: 'apartment', label: 'Пентхаус и квартира', icon: '🏢', image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80' },
+    { id: 'office', label: 'Корпоративный офис', icon: '💼', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80' },
+    { id: 'retail', label: 'Розничная торговля', icon: '🛍️', image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80' }
 ];
 
 export const StepPropertyType = ({ selected, onSelect }) => {
@@ -16,19 +16,19 @@ export const StepPropertyType = ({ selected, onSelect }) => {
                     key={type.id}
                     onClick={() => onSelect(type.id)}
                     className={`relative group cursor-pointer overflow-hidden rounded-2xl h-[400px] border transition-all duration-300 ${selected === type.id
-                            ? 'border-gold shadow-[0_0_30px_rgba(212,175,55,0.3)] scale-[1.02]'
-                            : 'border-white/10 hover:border-white/30'
+                        ? 'border-gold shadow-[0_0_30px_rgba(212,175,55,0.3)] scale-[1.02]'
+                        : 'border-white/10 hover:border-white/30'
                         }`}
                     whileHover={{ y: -5 }}
                 >
                     {/* Background Image */}
-                    <div className="absolute inset-0 bg-gray-900">
+                    <div className="absolute inset-0 bg-white/5">
                         <img
                             src={type.image || `https://placehold.co/600x800/1a1a1a/FFF?text=${type.label}`}
                             alt={type.label}
-                            className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
+                            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
                     </div>
 
                     {/* Content */}

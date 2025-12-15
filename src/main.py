@@ -78,14 +78,14 @@ try:
     try:
         from api.routes import auth
         app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
-    except ImportError:
-        print("Warning: Auth module not available")
+    except Exception as e:
+        print(f"Warning: Auth module not available: {e}")
 
     # Include reports router
     try:
         from api.routes import reports
         app.include_router(reports.router, prefix="/api/v1/reports", tags=["reports"])
-    except ImportError as e:
+    except Exception as e:
         print(f"Warning: Reports module not available: {e}")
 
 except ImportError as e:

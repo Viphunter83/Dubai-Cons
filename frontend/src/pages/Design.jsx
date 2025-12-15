@@ -1,4 +1,5 @@
 import React from 'react'
+// Placeholder command, will check file first.
 import DesignWizard from '../components/wizard/DesignWizard'
 
 function Design() {

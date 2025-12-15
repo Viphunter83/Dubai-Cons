@@ -151,6 +151,20 @@ export function useDesign() {
         }
     };
 
+    const resetDesign = () => {
+        setResult(null);
+        setError(null);
+        setDesignData({
+            client_preferences: '',
+            project_details: '',
+            use_pro_for_image: false,
+            project_id: projectId ? parseInt(projectId) : null
+        });
+        localStorage.removeItem('lastDesignResult');
+        localStorage.removeItem('lastDesignTime');
+        setMode('presets');
+    };
+
     return {
         mode, setMode,
         loading,
@@ -162,7 +176,8 @@ export function useDesign() {
             generateFromPresets,
             generateFromText,
             validateCompliance,
-            downloadReport
+            downloadReport,
+            resetDesign
         }
     };
 }

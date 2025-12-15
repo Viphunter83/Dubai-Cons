@@ -53,9 +53,18 @@ class DesignAIService:
             )
             
             if not response:
-                return None
-            
-            design_description = response["choices"][0]["message"]["content"]
+                print("Primary AI text generation failed. Using fallback description.")
+                design_description = (
+                    f"**Design Concept (Fallback Generated)**\n\n"
+                    f"Based on your request for a {client_preferences} style,\n"
+                    f"we propose a sophisticated layout that harmonizes functionality with aesthetics.\n\n"
+                    f"- **Style:** {client_preferences}\n"
+                    f"- **Atmosphere:** Modern, clean, and elegant.\n"
+                    f"- **Key Elements:** High-quality materials, optimal lighting, and spatial efficiency.\n\n"
+                    f"(Note: AI servers are currently busy, this is a placeholder description.)"
+                )
+            else:
+                design_description = response["choices"][0]["message"]["content"]
             
             # Generate image
             image_url = None

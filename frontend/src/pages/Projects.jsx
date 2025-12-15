@@ -52,7 +52,11 @@ function Projects() {
               Manage and visualize your ongoing construction developments.
             </p>
           </div>
-          <Button variant="primary" onClick={() => navigate('/design')}>
+          <Button variant="primary" onClick={() => {
+            localStorage.removeItem('lastDesignResult');
+            localStorage.removeItem('lastDesignTime');
+            navigate('/design');
+          }}>
             + New Project
           </Button>
         </div>

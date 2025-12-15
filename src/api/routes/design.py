@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field, validator
 from typing import List, Dict, Any, Optional
 from services.design_service import design_service
 from services.compliance_service import compliance_service
+from services.visualization_service import visualization_service
 
 from database.connection import get_db
 from database.models import DesignConcept
@@ -58,7 +59,8 @@ class DesignResponse(BaseModel):
     style: str
     color_scheme: str
     compliance_report: Optional[Dict[str, Any]] = None
-    rooms_designs: Optional[List[Dict[str, Any]]] = None  # Designs for each room
+    rooms_designs: Optional[List[Dict[str, Any]]] = None
+    visualization: Optional[Dict[str, Any]] = None  # 3D Scene Data
     
     class Config:
         from_attributes = True
@@ -73,6 +75,12 @@ async def generate_design_by_presets(
     Generate design concept using presets (property type, style, rooms)
     Generates separate design for each room type
     """
+    if not request.rooms:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="At least one room is required"
+        )
+
     rooms_designs = []
     
     # Generate design for each room type
@@ -123,8 +131,8 @@ async def generate_design_by_presets(
     for room in rooms_designs:
         room_type = room['room_type'].upper()
         room_area = room['area']
-        room_desc = room['description'][:200]
-        overall_description += f"\n{room_type} ({room_area} sqm):\n{room_desc}...\n"
+        room_desc = room['description']
+        overall_description += f"\n{room_type} ({room_area} sqm):\n{room_desc}\n"
     
     # Save main design concept to database
     db_design = DesignConcept(
@@ -137,6 +145,29 @@ async def generate_design_by_presets(
     db.add(db_design)
     db.commit()
     db.refresh(db_design)
+
+    # Generate Visualization for the first room (MVP)
+    visualization_data = None
+    try:
+        if request.rooms:
+            first_room = request.rooms[0]
+            # Simple assumption for dimensions based on area (square root)
+            side = first_room.area ** 0.5
+            dims = {"width": side, "depth": side, "height": 3.0}
+            
+            design_elements = {
+                "style": request.design_style,
+                "floor_material": "marble" if "luxury" in request.design_style.lower() else "wood",
+                "wall_color": rooms_designs[0].get("color_scheme", "Neutral")
+            }
+            
+            visualization_data = await visualization_service.create_3d_scene(
+                room_type=first_room.type,
+                dimensions=dims,
+                design_elements=design_elements
+            )
+    except Exception as e:
+        print(f"Visualization generation failed: {e}")
     
     return DesignResponse(
         id=db_design.id,
@@ -144,7 +175,8 @@ async def generate_design_by_presets(
         image_url=rooms_designs[0].get("image_url") if rooms_designs else None,
         style=request.design_style,
         color_scheme=rooms_designs[0].get("color_scheme") if rooms_designs else "",
-        rooms_designs=rooms_designs
+        rooms_designs=rooms_designs,
+        visualization=visualization_data
     )
 
 
@@ -190,13 +222,33 @@ async def generate_design(
         except Exception as e:
             print(f"Error checking compliance: {e}")
 
+    # Generate Visualization (MVP)
+    visualization_data = None
+    try:
+        # Infer dimensions from text (naive) or use default
+        dims = {"width": 5.0, "depth": 4.0, "height": 3.0}
+        
+        design_elements = {
+            "style": result.get("style", "Modern"),
+            "color_scheme": result.get("color_scheme", "Neutral")
+        }
+        
+        visualization_data = await visualization_service.create_3d_scene(
+            room_type="living", # Default to living room if unknown
+            dimensions=dims,
+            design_elements=design_elements
+        )
+    except Exception as e:
+        print(f"Visualization generation failed: {e}")
+
     return DesignResponse(
         id=db_design.id,
         description=db_design.description,
         image_url=db_design.image_url,
         style=db_design.style,
         color_scheme=db_design.color_scheme,
-        compliance_report=compliance_result
+        compliance_report=compliance_result,
+        visualization=visualization_data
     )
 
 
