@@ -52,10 +52,13 @@ export default function BentoGrid() {
                 </GlassCard>
 
                 {/* 3. Materials (Tall Vertical) */}
-                <GlassCard className="md:col-span-1 md:row-span-2 relative overflow-hidden group border-white/10 bg-zinc-900">
-                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1518731517036-d9ff8a34237c?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
-                    <div className="relative z-10 h-full flex flex-col justify-end">
+                <GlassCard className="md:col-span-1 md:row-span-2 relative overflow-hidden group border-white/10 bg-gray-900/40">
+                    <div
+                        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-80"
+                        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&q=80&w=1000')" }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                    <div className="relative z-10 h-full flex flex-col justify-end p-6">
                         <Box className="text-white mb-2 drop-shadow-md" size={24} />
                         <h3 className="text-xl font-bold text-white mb-1 drop-shadow-md">Materials</h3>
                         <p className="text-gray-200 text-xs drop-shadow-md">Live supplier stocks</p>
